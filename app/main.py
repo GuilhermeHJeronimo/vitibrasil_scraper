@@ -11,10 +11,13 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="VitiBrasil Scraper API",
-    version="0.1.0"
+    version="0.1.0",
+    description="API para coletar e consultar dados da vitivinicultura brasileira via Embrapa.",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
-# Função de dependência para obter sessão com o banco
 def get_db():
     db = SessionLocal()
     try:

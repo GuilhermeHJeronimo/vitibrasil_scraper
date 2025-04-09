@@ -1,8 +1,7 @@
-# app/routes/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from app.database import get_db
+from app.dependencies import get_db
 from app.models import User
 from datetime import datetime, timedelta
 from jose import jwt

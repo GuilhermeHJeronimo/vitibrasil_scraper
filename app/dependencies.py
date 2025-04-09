@@ -6,6 +6,7 @@ from app.database import get_db
 from app.models import User
 import os
 from dotenv import load_dotenv
+from app.database import SessionLocal
 
 load_dotenv()
 
@@ -34,3 +35,10 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise credentials_exception
 
     return user
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

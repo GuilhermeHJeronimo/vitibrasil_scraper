@@ -1,14 +1,28 @@
-from sqlalchemy import Table, Column, Integer, String, MetaData
-from app.database import engine
 
-metadata = MetaData()
+import sqlite3
 
-def create_table(table_name: str):
-    table = Table(
-        table_name,
-        metadata,
-        Column("id", Integer, primary_key=True),
-        Column("coluna1", String),
-        Column("coluna2", String),
+def connect_db():
+    return sqlite3.connect("vitibrasil.db")
+
+def create_table(table_name):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute(f"""
+        CREATE TABLE IF NOT EXISTS '{table_name}' (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            categoria TEXT,
+            subcategoria TEXT,
+            quantidade INTEGER
+        );
+    """)
+    conn.commit()
+    conn.close()
+
+def insert_data(table_name, data):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.executemany(
+        f"INSERT INTO '{table_name}' (categoria, subcategoria, quantidade) VALUES (?, ?, ?)", data
     )
-    metadata.create_all(engine)
+    conn.commit()
+    conn.close()

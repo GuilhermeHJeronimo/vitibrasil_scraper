@@ -4,6 +4,8 @@ from app.database import engine, SessionLocal
 from app import models
 from app.auth import get_password_hash
 from app.models import User
+from app.schemas import UserCreate
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -35,3 +37,7 @@ def create_user(
     db.commit()
     db.refresh(user)
     return {"message": f"Usuário '{username}' criado com sucesso ✅"}
+
+@app.post("/create-user")
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    ...

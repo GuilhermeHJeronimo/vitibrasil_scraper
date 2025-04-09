@@ -1,3 +1,4 @@
+from fastapi import Header, HTTPException, status
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
@@ -59,3 +60,12 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     if user is None:
         raise credentials_exception
     return user
+
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN")
+
+def verify_admin_token(x_admin_token: str = Header(...)):
+    if x_admin_token != ADMIN_TOKEN:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token de admin inválido.",
+        )

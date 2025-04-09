@@ -1,8 +1,8 @@
 fastapi
 uvicorn
-sqlalchemy
-passlib[bcrypt]
-pydantic
 requests
 beautifulsoup4
+sqlalchemy
+passlib[bcrypt]
+python-jose[cryptography]
 python-dotenv

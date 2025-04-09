@@ -5,6 +5,8 @@ from app import models
 from app.auth import get_password_hash, get_current_user
 from app.models import User
 from app.schemas import UserCreate, UserOut
+from fastapi import FastAPI
+from app.routes import user, auth
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -13,6 +15,8 @@ app = FastAPI(
     version="0.1.0",
     description="🚀 API para coletar e consultar dados da vitivinicultura brasileira via Embrapa."
 )
+app.include_router(auth.router)
+app.include_router(user.router)
 
 def get_db():
     db = SessionLocal()

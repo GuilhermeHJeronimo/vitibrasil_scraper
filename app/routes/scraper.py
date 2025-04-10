@@ -1,14 +1,19 @@
-
-from fastapi import APIRouter, Depends, HTTPException
-from app.services.scraper import run_scraper
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
+from app.database import get_db
 from app.auth import get_current_user
+from app.services.scraper.scraper import scrape_table
 
-router = APIRouter()
+router = APIRouter(prefix="/api", tags=["Scraper"])
 
-@router.post("/scrape", tags=["Scraper"])
-def start_scraping(current_user: str = Depends(get_current_user)):
+@router.get("/scrape")
+def scrape(
+    table_name: str = Query(..., description="Nome da tabela para scraping"),
+    db: Session = Depends(get_db),
+    current_user: str = Depends(get_current_user)
+):
     try:
-        data = run_scraper()
-        return {"message": "Scraping concluído com sucesso!", "data": data}
+        result = scrape_table(table_name, db)
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

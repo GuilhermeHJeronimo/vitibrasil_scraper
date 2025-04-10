@@ -5,7 +5,10 @@ from app.auth import create_access_token, verify_password
 from app.models import User
 from app.database import get_db
 
-router = APIRouter(tags=["Autenticação"])
+router = APIRouter(
+    prefix="/auth",
+    tags=["Auth"]
+)
 
 @router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

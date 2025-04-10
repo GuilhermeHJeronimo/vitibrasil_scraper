@@ -1,5 +1,3 @@
-# app/services/scraper/scraper.py
-
 import requests
 from bs4 import BeautifulSoup
 from app.services.scraper.urls import URL_TABLE_MAP

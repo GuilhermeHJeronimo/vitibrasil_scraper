@@ -1,19 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
-from app.database import get_db
+from fastapi import APIRouter, Depends, HTTPException
+from app.scraper import vitibrasil_scraper
+from app.database import SessionLocal
 from app.auth import get_current_user
-from app.services.scraper.scraper import scrape_table
+from app.models import User
 
-router = APIRouter(prefix="/api", tags=["Scraper"])
+router = APIRouter()
+
 
 @router.get("/scrape")
-def scrape(
-    table_name: str = Query(..., description="Nome da tabela para scraping"),
-    db: Session = Depends(get_db),
-    current_user: str = Depends(get_current_user)
-):
+def scrape_data(table_name: str, current_user: User = Depends(get_current_user)):
+    db = SessionLocal()
     try:
-        result = scrape_table(table_name, db)
-        return result
+        vitibrasil_scraper.scrape_and_store(table_name, db)
+        return {"message": f"Dados da tabela {table_name} foram armazenados com sucesso!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.scraper import vitibrasil_scraper
+from app.services.scraper.scraper import vitibrasil_scraper
 from app.database import SessionLocal
 from app.auth import get_current_user
 from app.models import User
